@@ -10,8 +10,6 @@
 package blake2b
 
 func blocks(d *digest, p []uint8) {
-	h0, h1, h2, h3, h4, h5, h6, h7 := d.h[0], d.h[1], d.h[2], d.h[3], d.h[4], d.h[5], d.h[6], d.h[7]
-
 	for len(p) >= BlockSize {
 		// Increment counter.
 		d.t[0] += BlockSize
@@ -19,7 +17,7 @@ func blocks(d *digest, p []uint8) {
 			d.t[1]++
 		}
 		// Initialize compression function.
-		v0, v1, v2, v3, v4, v5, v6, v7 := h0, h1, h2, h3, h4, h5, h6, h7
+		v0, v1, v2, v3, v4, v5, v6, v7 := d.h[0], d.h[1], d.h[2], d.h[3], d.h[4], d.h[5], d.h[6], d.h[7]
 		v8 := iv[0]
 		v9 := iv[1]
 		v10 := iv[2]
@@ -1405,16 +1403,15 @@ func blocks(d *digest, p []uint8) {
 		v5 ^= v10
 		v5 = v5<<(64-63) | v5>>63
 
-		h0 ^= v0 ^ v8
-		h1 ^= v1 ^ v9
-		h2 ^= v2 ^ v10
-		h3 ^= v3 ^ v11
-		h4 ^= v4 ^ v12
-		h5 ^= v5 ^ v13
-		h6 ^= v6 ^ v14
-		h7 ^= v7 ^ v15
+		d.h[0] ^= v0 ^ v8
+		d.h[1] ^= v1 ^ v9
+		d.h[2] ^= v2 ^ v10
+		d.h[3] ^= v3 ^ v11
+		d.h[4] ^= v4 ^ v12
+		d.h[5] ^= v5 ^ v13
+		d.h[6] ^= v6 ^ v14
+		d.h[7] ^= v7 ^ v15
 
 		p = p[BlockSize:]
 	}
-	d.h[0], d.h[1], d.h[2], d.h[3], d.h[4], d.h[5], d.h[6], d.h[7] = h0, h1, h2, h3, h4, h5, h6, h7
 }
